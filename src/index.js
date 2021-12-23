@@ -1,6 +1,8 @@
 
-import { saludar } from './js/componentes'
 import './styles.css';
 
-const nombre = 'WLX';
-saludar( nombre );
+import { init } from './js/usuarios-page';
+
+//console.log('hola mundo !!!!!!!!!!');
+
+init();
