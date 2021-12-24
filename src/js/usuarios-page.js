@@ -3,7 +3,14 @@ import { crearProducto, getUsuario, obtenerProductos, obtenerUsuarios } from "./
 const body  = document.body;
 let tbody1;
 let tbody2;
-const btnInsert = document.querySelector('#btnInsert');
+const btnIngresarProducto     = document.querySelector('#btnIngresarProducto');
+
+const nombre        = document.querySelector("#nombre_insertar_producto");
+const disponible    = document.querySelector("#disponible_insertar_producto");
+const precio        = document.querySelector("#precio_insertar_producto");
+const fotoUrl       = document.querySelector("#imagen_insertar_producto");
+
+let productoCapturado = {};
 
     // <button type="submit" class="btn btn-light" onclick="writeNewPost()">Submit</button>
 
@@ -27,15 +34,15 @@ const crearHtml = () => {
         </tbody>
     </table>
 
-    <h1 class="mt-5"> Productos - Firebase</h1>
+    <h1 class="mt-5">Usuarios</h1>
 
     <table class="table">
     <thead>
         <tr>
-            <th scope="col">Articulo</th>
-            <th scope="col">Disponible</th>
-            <th scope="col">Precio USD</th>
-            <th scope="col">Imagen</th>
+            <th scope="col">ID</th>
+            <th scope="col">email</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Avatar</th>
         </tr>
     </thead>
 
@@ -68,6 +75,7 @@ const crearFilaUsuario = ( usuario ) => {
 //---------------------------------------------Funciones productos en firebase------------------------------
 //Funcion para hacer el render en html de la fila de cada producto
 const crearFilaProducto = ( producto ) => {
+    //console.log(producto);
     const html = `
         <td scope="col"> ${producto.titulo} </td>
         <td scope="col"> ${producto.disponible} </td>
@@ -77,20 +85,6 @@ const crearFilaProducto = ( producto ) => {
     const tr = document.createElement('tr');
     tr.innerHTML = html;
     tbody1.appendChild( tr );
-}
-
-
-//Funcion para crear un nuevo item en la lista de articulos en firebase
-//Leer los campos y meterlos en el objeto
-const writeNewPost = () => {
-    let valorDelCampo = 'sofacamaaaa2';
-    let postData = {
-      "available": valorDelCampo,
-      "name": "balon",
-      "picture": "https://res.cloudinary.com/wmss/image/upload/v1620233614/cxw3qfrcbwiv4lhdfhst.jpg",
-      "price": "500",
-    };
-    crearProducto(postData);
 }
 
 
@@ -107,9 +101,20 @@ export const init = async() => {
 
 
     //writeNewPost();
-
-    btnInsert.addEventListener('click', () => {
-        console.log('Hola mundo');
-        writeNewPost();
+//Esta funcion crea un objeto producto y lo envia mediante la fx crearProducto() a la lista html
+    btnIngresarProducto.addEventListener('click', () => {
+        productoCapturado = {
+            "available": disponible.value,
+            "name": nombre.value,
+            "picture": fotoUrl.value,
+            "price": precio.value,
+        }
+        crearProducto(productoCapturado);
+        nombre.value = '';
+        disponible.value = '';
+        fotoUrl.value = '';
+        precio.value = '';
+        alert('nueva entrada a la BD : ' + productoCapturado.name);
     });
 
+// https://img.joomcdn.net/e3a7b25791a4258c213870b718f451ad3abfed97_original.jpeg

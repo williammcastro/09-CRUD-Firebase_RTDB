@@ -3,6 +3,10 @@ const urlCRUD = 'https://reqres.in/api/users';
 const urlFirebaseProductos = 'https://real-automotivation-default-rtdb.firebaseio.com/products.json';
 
 
+const baseUrl = 'identitytoolkit.googleapis.com';
+const firebaseToken = 'AIzaSyDFUD7ZaNazbMUPQdwYPxWqQK2IuQ5bmVI';
+
+
 // //GET se obtiene el usuario
 const getUsuario = async(id) => {
     const resp = await fetch(`${ urlCRUD }/${ id }`);
@@ -23,7 +27,7 @@ const crearUsuario = async( usuario ) => {
         }
     } );
 
-    //console.log(await resp.json());//Para probar!
+    console.log(await resp.json());//Para probar!
     return await resp.json();
 }
 
@@ -69,13 +73,11 @@ const obtenerProductos = async () => {
 
     const resp = await fetch( urlFirebaseProductos );
     const producto   = await resp.json();
-
     let productos = Object.entries( producto );
     //console.log(productos);
 
     for (let i = 0; i < productos.length; i++)  {
         // console.log(productos[i][1].name );
-
         objProducto = {
             'titulo'     : productos[i][1].name,
             'disponible' : productos[i][1].available,
@@ -104,15 +106,29 @@ const crearProducto = async( producto ) => {
     return await resp.json();
 }
 
+//Funcion para borrar productos
+const borrarProducto = ( id ) => {
+    console.log('borrando el id' + id)
+    //TODO:completar la funcion
+}
+
+//Funcion para actualizar producto
+const actualizarProducto = ( id ) =>{
+    console.log('actualizando producto ' + id);
+    //TODO:completar la funcion
+}
+
 
 export {
     getUsuario,
     crearUsuario,
     actualizarUsuario,
     obtenerUsuarios,
-    obtenerProductos,
     borrarUsuario,
-    crearProducto
+    obtenerProductos,
+    crearProducto,
+    borrarProducto
+
 }
 
 /*
@@ -124,6 +140,17 @@ Esta es la config para firebase realtime con passwd
   }
 }
 */
+
+/*
+Esta es la config para firebase realtime con passwd
+{
+  "rules": {
+    ".read": true, 
+    ".write": true,
+  }
+}
+*/
+
 
 
 

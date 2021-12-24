@@ -5,38 +5,40 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <title>Webpack</title>
+    <title>Tienda Virtual</title>
 </head>
 <body>
     <!-- <h1>Webpack starter 3</h1> -->
 
-    <img src="assets/img/JTG.png" alt="logo">
+    <img src="assets/img/tienda.png" width="180px">
+<!-- -------------------------------INICIO BLOQUE PRODUCTOS--------------------------------- -->
+
 <hr>
     <div id="cuadro">
         <form action="/my-handling-form-page" method="post">
-            <h1 class="mt-5">Insertar Producto</h1>
+            <h1 class="mt-5">Ingresar Producto</h1>
                 <ul>
                     <li>
-                        <label for="nombre">Nombre:</label>
-                        <input type="text" id="nombre" name="product_name">
+                        <label for="nombre_insertar_producto">Nombre:</label>
+                        <input type="text" id="nombre_insertar_producto" name="nombre_insertar_producto">
                     </li>
                     <li>
-                        <label for="disponible">disponible:</label>
-                        <input type="text" id="disponible" name="product_available">
+                        <label for="disponible_insertar_producto">Disponible:</label>
+                        <input type="text" id="disponible_insertar_producto" name="disponible_insertar_producto">
                     </li>
                     <li>
-                        <label for="precio">precio:</label>
-                        <input type="text" id="precio" name="product_price">
+                        <label for="precio_insertar_producto">Precio:</label>
+                        <input type="text" id="precio_insertar_producto" name="precio_insertar_producto">
                     </li>
                     <li>
-                        <label for="imagen">imagen:</label>
-                        <input type="text" id="imagen" name="product_imagen">
+                        <label for="imagen_insertar_producto">Imagen:</label>
+                        <input type="text" id="imagen_insertar_producto" name="imagen_insertar_producto">
                     </li>
 
                 </ul>
             </form>
             <li class="button">
-                <button id="btnInsert" class="btn btn-primary">Ingresar</button>
+                <button id="btnIngresarProducto" class="btn btn-primary">Ingresar Producto</button>
             </li>
     </div>
 
@@ -47,20 +49,24 @@
             <h1 class="mt-5">Actualizar Producto</h1>
                 <ul>
                     <li>
-                        <label for="nombre">Nombre:</label>
-                        <input type="text" id="nombre" name="product_name">
+                        <label for="ID_actualizar_producto">ID:</label>
+                        <input type="text" id="ID_actualizar_producto" name="ID_actualizar_producto">
                     </li>
                     <li>
-                        <label for="disponible">disponible:</label>
-                        <input type="text" id="disponible" name="available">
+                        <label for="nombre_actualizar">Nombre:</label>
+                        <input type="text" id="nombre_actualizar_producto" name="nombre_actualizar_producto">
                     </li>
                     <li>
-                        <label for="precio">precio:</label>
-                        <input type="text" id="precio" name="price">
+                        <label for="disponible_actualizar_producto">disponible:</label>
+                        <input type="text" id="disponible_actualizar_producto" name="disponible_actualizar_producto">
                     </li>
                     <li>
-                        <label for="imagen">imagen:</label>
-                        <input type="text" id="imagen" name="imagen">
+                        <label for="precio_actualizar_producto">precio:</label>
+                        <input type="text" id="precio_actualizar_producto" name="precio_actualizar_producto">
+                    </li>
+                    <li>
+                        <label for="imagen_actualizar_producto">imagen:</label>
+                        <input type="text" id="imagen_actualizar_producto" name="imagen_actualizar_producto">
                     </li>
                 </ul>
         </form>
@@ -74,8 +80,8 @@
             <h1 class="mt-5">Eliminar producto</h1>
                 <ul>
                     <li>
-                        <label for="nombre">Nombre:</label>
-                        <input type="text" id="nombre" name="product_name">
+                        <label for="ID_eliminar_producto">ID:</label>
+                        <input type="text" id="ID_eliminar_producto" name="ID_eliminar_producto">
                     </li>
 
                 </ul>
@@ -85,6 +91,79 @@
         </li>
     </div>
 <hr>
+
+<!-- -------------------------------INICIO BLOQUE USUARIOS--------------------------------- -->
+
+    <div id="cuadro">
+        <form action="/my-handling-form-page" method="post">
+            <h1 class="mt-5">Crear Usuario</h1>
+                <ul>
+                    <li>
+                        <label for="nombre_crear_usuario">Nombre:</label>
+                        <input type="text" id="nombre_crear_usuario" name="nombre_crear_usuario">
+                    </li>
+                    <li>
+                        <label for="email_crear_usuario">email:</label>
+                        <input type="email" id="email_crear_usuario" name="email_crear_usuario">
+                    </li>
+                    <li>
+                        <label for="avatar_crear_usuario">Avatar:</label>
+                        <input type="text" id="avatar_crear_usuario" name="avatar_crear_usuario">
+                    </li>
+                </ul>
+            </form>
+            <li class="button">
+                <button id="btnCrearUsuario" class="btn btn-primary">Crear Usuario</button>
+            </li>
+    </div>
+
+
+    <div id="cuadro">
+
+        <form action="/my-handling-form-page" method="post">
+            <h1 class="mt-5">Actualizar Usuario</h1>
+                <ul>
+                    <li>
+                        <label for="id_actualizar_usuario">ID:</label>
+                        <input type="text" id="id_actualizar_usuario" name="id_actualizar_usuario">
+                    </li>
+                    <li>
+                        <label for="nombre_actualizar_usuario">Nombre:</label>
+                        <input type="text" id="nombre_actualizar_usuario" name="nombre_actualizar_usuario">
+                    </li>
+                    <li>
+                        <label for="email_actualizar_usuario">email:</label>
+                        <input type="email" id="email_actualizar_usuario" name="email_actualizar_usuario">
+                    </li>
+                    <li>
+                        <label for="avatar_actualizar_usuario">Avatar:</label>
+                        <input type="text" id="avatar_actualizar_usuario" name="avatar_actualizar_usuario">
+                    </li>
+                </ul>
+        </form>
+        <li class="button">
+            <button id="boton2" class="btn btn-primary">Actualizar</button>
+        </li>
+    </div>
+
+    <div id="cuadro">
+        <form action="/my-handling-form-page" method="post">
+            <h1 class="mt-5">Eliminar Usuario</h1>
+                <ul>
+                    <li>
+                        <label for="id_eliminar_usuario">ID:</label>
+                        <input type="text" id="id_eliminar_usuario" name="id_eliminar_usuario">
+                    </li>
+
+                </ul>
+        </form>
+        <li class="button">
+            <button id="boton2" class="btn btn-primary">Eliminar</button>
+        </li>
+    </div>
+<hr>
+
+<!-- -------------------------------FIN BLOQUE USUARIOS--------------------------------- -->
 
 
     <!-- <script src="./index.js"></script> -->
