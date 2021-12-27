@@ -1,18 +1,50 @@
-import { crearProducto, getUsuario, obtenerProductos, obtenerUsuarios } from "./crud-provider";
+import { crearProducto, getUsuario, obtenerProductos, obtenerUsuarios, crearUsuario } from "./crud-provider";
 
 const body  = document.body;
 let tbody1;
 let tbody2;
-const btnIngresarProducto     = document.querySelector('#btnIngresarProducto');
+//botones
 
+
+//-----CAJAS DE TEXTO------------------------
+
+//Campos para lectura de cajas de texto ingresar producto
 const nombre        = document.querySelector("#nombre_insertar_producto");
 const disponible    = document.querySelector("#disponible_insertar_producto");
 const precio        = document.querySelector("#precio_insertar_producto");
 const fotoUrl       = document.querySelector("#imagen_insertar_producto");
 
-let productoCapturado = {};
+//Campos para lectura de cajas de texto actualizar producto
 
-    // <button type="submit" class="btn btn-light" onclick="writeNewPost()">Submit</button>
+
+//Campos para lectura de cajas de texto eliminar producto
+
+
+//Campos para lectura de cajas de texto crear usuario
+const nombre_crear_usuario = document.querySelector('#nombre_crear_usuario');
+const email_crear_usuario = document.querySelector('#email_crear_usuario');
+const pw_crear_usuario = document.querySelector('#pw_crear_usuario');
+const avatar_crear_usuario = document.querySelector('#avatar_crear_usuario');
+
+
+
+
+//Campos para lectura de cajas de texto actualizar usuario
+
+
+//Campos para lectura de cajas de texto borrar usuario
+
+//-----BOTONES--------------------------------
+
+const btnIngresarProducto     = document.querySelector('#btnIngresarProducto');
+const btnCrearUsuario     = document.querySelector('#btnCrearUsuario');
+
+
+
+
+
+//------FUNCIONES-----------------------------
+let productoCapturado = {};
 
 const crearHtml = () => {
     
@@ -100,7 +132,6 @@ export const init = async() => {
 //----------------------------------------Eventos------------------------------------
 
 
-    //writeNewPost();
 //Esta funcion crea un objeto producto y lo envia mediante la fx crearProducto() a la lista html
     btnIngresarProducto.addEventListener('click', () => {
         productoCapturado = {
@@ -110,6 +141,7 @@ export const init = async() => {
             "price": precio.value,
         }
         crearProducto(productoCapturado);
+        //reiniciar la caja de texto con caracteres vacios:
         nombre.value = '';
         disponible.value = '';
         fotoUrl.value = '';
@@ -117,4 +149,28 @@ export const init = async() => {
         alert('nueva entrada a la BD : ' + productoCapturado.name);
     });
 
+
+// imagen para probar:
 // https://img.joomcdn.net/e3a7b25791a4258c213870b718f451ad3abfed97_original.jpeg
+
+
+//Esta funcion crea un nuevo usuario:
+    //Funcion que ejecuta el turno del jugador con el click
+
+    btnCrearUsuario.addEventListener('click', (  ) => {
+
+        console.log('Hola mundo 33');
+        const usuarioCapturado = {
+            "nombre":nombre_crear_usuario.value,
+            "email": email_crear_usuario.value,
+            "password": pw_crear_usuario.value,
+            "avatar": avatar_crear_usuario.value
+        }
+        crearUsuario(usuarioCapturado);
+        //reiniciar la caja de texto con caracteres vacios:
+        nombre_crear_usuario.value  = '';
+        email_crear_usuario.value   = '';
+        pw_crear_usuario.value      = '';
+        avatar_crear_usuario.value  = '';
+        alert('nuevo usuario creado : ' + usuarioCapturado.nombre);
+    });

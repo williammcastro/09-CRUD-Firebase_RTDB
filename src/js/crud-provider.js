@@ -3,7 +3,7 @@ const urlCRUD = 'https://reqres.in/api/users';
 const urlFirebaseProductos = 'https://real-automotivation-default-rtdb.firebaseio.com/products.json';
 
 
-const baseUrl = 'identitytoolkit.googleapis.com';
+const baseUrlUsuarios = 'https://identitytoolkit.googleapis.com';
 const firebaseToken = 'AIzaSyDFUD7ZaNazbMUPQdwYPxWqQK2IuQ5bmVI';
 
 
@@ -19,7 +19,9 @@ const getUsuario = async(id) => {
 // // POST respuesta 400? depende del backend
 const crearUsuario = async( usuario ) => {
 
-    const resp = await fetch( `${urlCRUD}`, {
+    const crearUsuario = '/v1/accounts:signUp?key=';
+
+    const resp = await fetch( `${baseUrlUsuarios}${crearUsuario}${firebaseToken}`, {
         method: 'POST',
         body: JSON.stringify( usuario ),
         headers: {
@@ -28,7 +30,7 @@ const crearUsuario = async( usuario ) => {
     } );
 
     console.log(await resp.json());//Para probar!
-    return await resp.json();
+    //return await resp.json();
 }
 
 
@@ -142,7 +144,7 @@ Esta es la config para firebase realtime con passwd
 */
 
 /*
-Esta es la config para firebase realtime con passwd
+Esta es la config para firebase realtime sin passwd
 {
   "rules": {
     ".read": true, 
