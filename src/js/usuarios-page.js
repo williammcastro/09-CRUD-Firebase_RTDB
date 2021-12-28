@@ -1,4 +1,6 @@
-import { crearProducto, getUsuario, obtenerProductos, obtenerUsuarios, crearUsuario } from "./crud-provider";
+import { crearProducto, getUsuario, obtenerProductos, obtenerUsuarios, crearUsuario, login } from "./crud-provider";
+
+let tokenAuthFB2 = '';
 
 const body  = document.body;
 let tbody1;
@@ -13,6 +15,10 @@ const nombre        = document.querySelector("#nombre_insertar_producto");
 const disponible    = document.querySelector("#disponible_insertar_producto");
 const precio        = document.querySelector("#precio_insertar_producto");
 const fotoUrl       = document.querySelector("#imagen_insertar_producto");
+const email_login   = document.querySelector('#email_login');
+const pw_login      = document.querySelector('#pw_login');
+
+
 
 //Campos para lectura de cajas de texto actualizar producto
 
@@ -36,8 +42,9 @@ const avatar_crear_usuario = document.querySelector('#avatar_crear_usuario');
 
 //-----BOTONES--------------------------------
 
-const btnIngresarProducto     = document.querySelector('#btnIngresarProducto');
-const btnCrearUsuario     = document.querySelector('#btnCrearUsuario');
+const btnIngresarProducto   = document.querySelector('#btnIngresarProducto');
+const btnCrearUsuario       = document.querySelector('#btnCrearUsuario');
+const btnLogin              = document.querySelector('#btnLogin');
 
 
 
@@ -155,15 +162,13 @@ export const init = async() => {
 
 
 //Esta funcion crea un nuevo usuario:
-    //Funcion que ejecuta el turno del jugador con el click
-
     btnCrearUsuario.addEventListener('click', (  ) => {
 
-        console.log('Hola mundo 33');
         const usuarioCapturado = {
             "nombre":nombre_crear_usuario.value,
             "email": email_crear_usuario.value,
             "password": pw_crear_usuario.value,
+            "returnSecureToken": true,
             "avatar": avatar_crear_usuario.value
         }
         crearUsuario(usuarioCapturado);
@@ -174,3 +179,40 @@ export const init = async() => {
         avatar_crear_usuario.value  = '';
         alert('nuevo usuario creado : ' + usuarioCapturado.nombre);
     });
+
+
+    //Esta funcion es para loguear un nuevo usuario
+    btnLogin.addEventListener( 'click', async () => {
+        const usuarioLogin = {
+            "email": email_login.value,
+            "password": pw_login.value,
+            "returnSecureToken": true,
+        }
+
+        try {
+            let respLogin = await login(usuarioLogin);
+            //console.log( respLogin )
+        if ( !!respLogin.idToken ){
+            console.log('Usuario correctamente logueado : ' + respLogin.email)
+            let tokenAuth = respLogin.idToken;//este es el q necesito para hacer get en la bd de firebase
+            //console.log(tokenAuth);
+            grabarToken(tokenAuth);
+            //Reiniciar la caja de texto de login
+            email_login.value = '';
+            pw_login.value = '';
+
+        }else{
+            console.log(  'Error de login : ' + respLogin.error.message );
+        }
+        } catch (error) {
+            console.log(error)
+            throw 'Este es un error con el login del usuario';
+        }
+    } );
+
+
+
+    //Setter para el localstorage
+    const grabarToken = (tokenAuth) => {
+        localStorage.setItem('tokenKey', tokenAuth);
+    }

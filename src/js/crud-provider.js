@@ -16,26 +16,64 @@ const getUsuario = async(id) => {
 }
 
 
-// // POST respuesta 400? depende del backend
-const crearUsuario = async( usuario ) => {
 
-    const crearUsuario = '/v1/accounts:signUp?key=';
 
-    const resp = await fetch( `${baseUrlUsuarios}${crearUsuario}${firebaseToken}`, {
+// loguear usuario en firebase/usuarios con POST
+const login = async( usuario ) => {
+
+    const loginUser = '/v1/accounts:signInWithPassword?key=';
+    let resp = '';
+
+    try {
+        resp = await fetch( `${baseUrlUsuarios}${loginUser}${firebaseToken}`, {
         method: 'POST',
         body: JSON.stringify( usuario ),
         headers: {
             'Content-Type': 'application/json'
         }
     } );
+    //console.log('try correctamente ejecutado');
+    } catch (err) {
+        console.log(err);
+        throw 'Error con el login del usuario : '
+    }
+    //console.log( await resp.json() );//Para probar!
+    return await resp.json();
+}
 
-    console.log(await resp.json());//Para probar!
+
+
+// crear usuario en firebase/usuarios de la bd POST 
+const crearUsuario = async( usuario ) => {
+
+    const crearUsuario = '/v1/accounts:signUp?key=';
+    let resp = '';
+
+    try {
+
+            resp = await fetch( `${baseUrlUsuarios}${crearUsuario}${firebaseToken}`, {
+            method: 'POST',
+            body: JSON.stringify( usuario ),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        } );
+
+    }catch(err){
+        console.log(err);
+        throw 'Error con la creacion del usuario : '
+
+        
+    }
+
+    //console.log(await resp.json());//Para probar!
     //return await resp.json();
 }
 
 
 // //PUT - respuesta 200
 const actualizarUsuario = async( id, usuario ) => {
+
 
     const resp = await fetch( `${urlCRUD}/${id}`, {
         method: 'PUT',
@@ -68,12 +106,21 @@ const obtenerUsuarios = async () => {
 }
 
 //---------------------------------------------Funciones productos en firebase------------------------------
-// Obtener los datos de los productos
+// Funcion para obtener todos los productos
+    //Cuando se usa auth se debe usar tokenAuthFB que se recupera en el login, para construir la peticion
+    //https://real-automotivation-default-rtdb.firebaseio.com/products.json?auth=tokenAuthFB
+    //const resp = await fetch( urlFirebaseProductos );
+
 const obtenerProductos = async () => {
     let productosHtml = [];
     let objProducto = {};
 
-    const resp = await fetch( urlFirebaseProductos );
+    let varAuth = '?auth='
+    let tokenAuthFB = recuperarToken();
+
+    //const resp = await fetch( urlFirebaseProductos );//fetch sin auth!
+    const resp = await fetch( `${urlFirebaseProductos}${varAuth}${tokenAuthFB}` );
+
     const producto   = await resp.json();
     let productos = Object.entries( producto );
     //console.log(productos);
@@ -94,10 +141,26 @@ const obtenerProductos = async () => {
 }
 
 
+//Getter para el localstorage
+
+const recuperarToken = () => {
+    let token = '';
+    if ( localStorage.getItem('tokenKey') ){
+        token = localStorage.getItem('tokenKey');
+        //console.log('recuperar token');
+    }else{
+        console.log('no hay token guardados - cliente no logueado');
+    }
+    return token;
+}
+
+
 // POST respuesta 400? depende del backend
 const crearProducto = async( producto ) => {
+    let varAuth = '?auth='
+    let tokenAuthFB = recuperarToken();
 
-    const resp = await fetch( `${ urlFirebaseProductos }`, {
+    const resp = await fetch( `${ urlFirebaseProductos }${varAuth}${tokenAuthFB}`, {
         method: 'POST',
         body: JSON.stringify( producto ),
         headers: {
@@ -129,7 +192,8 @@ export {
     borrarUsuario,
     obtenerProductos,
     crearProducto,
-    borrarProducto
+    borrarProducto,
+    login
 
 }
 
@@ -154,6 +218,15 @@ Esta es la config para firebase realtime sin passwd
 */
 
 
+/*
+Esta es la config para firebase realtime con auth - hay mas reglas para aplicar
+{
+  "rules": {
+    ".read": "auth != null", // 2021-6-2
+    ".write": "auth != null", // 2021-6-2
+  }
+}
+
 
 
 /*
@@ -169,3 +242,6 @@ fotoUrl :"https://res.cloudinary.com/wmss/image/upload/v1620233614/cxw3qfrcbwiv4
 titulo Mouse
 valor 5
 */
+
+
+//git commit -m "auth ok! para login, leer productos y crear productos"
