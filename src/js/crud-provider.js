@@ -1,7 +1,8 @@
 
+import { getToken } from './localStorage'
+
 const urlCRUD = 'https://reqres.in/api/users';
 const urlFirebaseProductos = 'https://real-automotivation-default-rtdb.firebaseio.com/products.json';
-
 
 const baseUrlUsuarios = 'https://identitytoolkit.googleapis.com';
 const firebaseToken = 'AIzaSyDFUD7ZaNazbMUPQdwYPxWqQK2IuQ5bmVI';
@@ -14,8 +15,6 @@ const getUsuario = async(id) => {
     //console.log(data);
     return data;
 }
-
-
 
 
 // loguear usuario en firebase/usuarios con POST
@@ -33,11 +32,13 @@ const login = async( usuario ) => {
         }
     } );
     //console.log('try correctamente ejecutado');
-    } catch (err) {
+    }catch(err){
+        navbar_usuario_logueado.innerHTML = '***';
         console.log(err);
         throw 'Error con el login del usuario : '
     }
     //console.log( await resp.json() );//Para probar!
+    console.log('antes del return');
     return await resp.json();
 }
 
@@ -50,7 +51,6 @@ const crearUsuario = async( usuario ) => {
     let resp = '';
 
     try {
-
             resp = await fetch( `${baseUrlUsuarios}${crearUsuario}${firebaseToken}`, {
             method: 'POST',
             body: JSON.stringify( usuario ),
@@ -62,10 +62,7 @@ const crearUsuario = async( usuario ) => {
     }catch(err){
         console.log(err);
         throw 'Error con la creacion del usuario : '
-
-        
     }
-
     //console.log(await resp.json());//Para probar!
     //return await resp.json();
 }
@@ -74,7 +71,6 @@ const crearUsuario = async( usuario ) => {
 // //PUT - respuesta 200
 const actualizarUsuario = async( id, usuario ) => {
 
-
     const resp = await fetch( `${urlCRUD}/${id}`, {
         method: 'PUT',
         body: JSON.stringify( usuario ),
@@ -82,7 +78,6 @@ const actualizarUsuario = async( id, usuario ) => {
             'Content-Type': 'application/json'
         }
     } );
-
     return await resp.json();
 }
 
@@ -92,12 +87,11 @@ const borrarUsuario = async( id ) => {
     const resp = await fetch(`${urlCRUD}/${id}`, {
         method: 'DELETE'
     });
-
     return ( resp.ok ) ? 'Borrado' : 'No se pudo eliminar';
 }
 
 
-// Obtener todos los usuarios
+// Funcion para Obtener todos los usuarios
 const obtenerUsuarios = async () => {
     const resp = await fetch( urlCRUD );
     const { data:usuarios } = await resp.json();
@@ -116,7 +110,7 @@ const obtenerProductos = async () => {
     let objProducto = {};
 
     let varAuth = '?auth='
-    let tokenAuthFB = recuperarToken();
+    let tokenAuthFB = getToken();
 
     //const resp = await fetch( urlFirebaseProductos );//fetch sin auth!
     const resp = await fetch( `${urlFirebaseProductos}${varAuth}${tokenAuthFB}` );
@@ -136,29 +130,14 @@ const obtenerProductos = async () => {
         productosHtml.push( objProducto )
     }
     //console.log( productosHtml );
-
     return productosHtml;
-}
-
-
-//Getter para el localstorage
-
-const recuperarToken = () => {
-    let token = '';
-    if ( localStorage.getItem('tokenKey') ){
-        token = localStorage.getItem('tokenKey');
-        //console.log('recuperar token');
-    }else{
-        console.log('no hay token guardados - cliente no logueado');
-    }
-    return token;
 }
 
 
 // POST respuesta 400? depende del backend
 const crearProducto = async( producto ) => {
     let varAuth = '?auth='
-    let tokenAuthFB = recuperarToken();
+    let tokenAuthFB = getToken();
 
     const resp = await fetch( `${ urlFirebaseProductos }${varAuth}${tokenAuthFB}`, {
         method: 'POST',
@@ -193,6 +172,7 @@ export {
     obtenerProductos,
     crearProducto,
     borrarProducto,
+    actualizarProducto,
     login
 
 }
@@ -244,4 +224,3 @@ valor 5
 */
 
 
-//git commit -m "auth ok! para login, leer productos y crear productos"

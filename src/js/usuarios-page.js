@@ -1,6 +1,9 @@
 import { crearProducto, getUsuario, obtenerProductos, obtenerUsuarios, crearUsuario, login } from "./crud-provider";
+import { getUsuarioLogin, setToken, setUsuarioLogin } from './localStorage'
 
 let tokenAuthFB2 = '';
+
+
 
 const body  = document.body;
 let tbody1;
@@ -31,6 +34,12 @@ const nombre_crear_usuario = document.querySelector('#nombre_crear_usuario');
 const email_crear_usuario = document.querySelector('#email_crear_usuario');
 const pw_crear_usuario = document.querySelector('#pw_crear_usuario');
 const avatar_crear_usuario = document.querySelector('#avatar_crear_usuario');
+
+
+//Campos para la lectura de botones de la barra de navegacion
+const navbar_usuario_logueado = document.querySelector('#usuarioLogueado')
+const btnUsuariosNavbar = document.querySelector('#btnUsuariosNavbar')
+const btnProductosNavbar = document.querySelector('#btnProductosNavbar')
 
 
 
@@ -127,15 +136,6 @@ const crearFilaProducto = ( producto ) => {
 }
 
 
-//---------------------------------------------Funcion init()------------------------------
-
-export const init = async() => {
-
-    crearHtml();
-    (await obtenerUsuarios()).forEach( crearFilaUsuario );
-    (await obtenerProductos()).forEach( crearFilaProducto );
-}
-
 //----------------------------------------Eventos------------------------------------
 
 
@@ -183,36 +183,69 @@ export const init = async() => {
 
     //Esta funcion es para loguear un nuevo usuario
     btnLogin.addEventListener( 'click', async () => {
+
+        let respLogin = {};
+
         const usuarioLogin = {
             "email": email_login.value,
             "password": pw_login.value,
             "returnSecureToken": true,
         }
 
-        try {
-            let respLogin = await login(usuarioLogin);
-            //console.log( respLogin )
-        if ( !!respLogin.idToken ){
-            console.log('Usuario correctamente logueado : ' + respLogin.email)
-            let tokenAuth = respLogin.idToken;//este es el q necesito para hacer get en la bd de firebase
-            //console.log(tokenAuth);
-            grabarToken(tokenAuth);
-            //Reiniciar la caja de texto de login
-            email_login.value = '';
-            pw_login.value = '';
+        
 
-        }else{
-            console.log(  'Error de login : ' + respLogin.error.message );
-        }
+        try {
+            respLogin = await login(usuarioLogin);
+            //console.log( respLogin )
+            if ( !!respLogin.idToken ){
+                console.log('Usuario correctamente logueado : ' + respLogin.email)
+                let tokenAuth = respLogin.idToken;//este es el q necesito para hacer get en la bd de firebase
+                //console.log(tokenAuth );
+                setToken(tokenAuth);
+                //Reiniciar la caja de texto de login
+                email_login.value = '';
+                pw_login.value = '';
+
+                let usuarioNavbar = respLogin.email;
+                navbar_usuario_logueado.innerHTML = usuarioNavbar;
+                setUsuarioLogin( usuarioNavbar );
+
+            }
+            else{
+                console.log(  'Error de login : ' + respLogin.error.message );
+                navbar_usuario_logueado.innerHTML = '';//manda string vacio al campo login del navBar
+                alert(respLogin.error.message);
+                //Reiniciar la caja de texto de login
+                email_login.value = '';
+                pw_login.value = '';
+            }
         } catch (error) {
+            navbar_usuario_logueado.innerHTML = '---';
             console.log(error)
+            alert(error);
             throw 'Este es un error con el login del usuario';
+
         }
+        // console.log( typeof(usuarioLogin) );
+
+
+
+
+
+
     } );
 
 
 
-    //Setter para el localstorage
-    const grabarToken = (tokenAuth) => {
-        localStorage.setItem('tokenKey', tokenAuth);
-    }
+//---------------------------------------------Funcion init()------------------------------
+
+export const init = async() => {
+
+    crearHtml();
+    (await obtenerUsuarios()).forEach( crearFilaUsuario );
+    (await obtenerProductos()).forEach( crearFilaProducto );
+    navbar_usuario_logueado.innerHTML = getUsuarioLogin();
+    btnUsuariosNavbar.style.visibility = 'hidden';
+    btnProductosNavbar.style.visibility = 'hidden';
+    
+}
