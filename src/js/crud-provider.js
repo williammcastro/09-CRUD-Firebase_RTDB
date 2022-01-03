@@ -17,7 +17,7 @@ const getUsuario = async(id) => {
 }
 
 
-// loguear usuario en firebase/usuarios con POST
+// loguear usuario en firebase/usuarios con POST - construyendo el url
 const login = async( usuario ) => {
 
     const loginUser = '/v1/accounts:signInWithPassword?key=';
@@ -37,14 +37,14 @@ const login = async( usuario ) => {
         console.log(err);
         throw 'Error con el login del usuario : '
     }
-    //console.log( await resp.json() );//Para probar!
+    //console.log( resp.json() );//Para probar!
     console.log('antes del return');
     return await resp.json();
 }
 
 
 
-// crear usuario en firebase/usuarios de la bd POST 
+// crear usuario en firebase/usuarios de la bd POST - construyendo el url
 const crearUsuario = async( usuario ) => {
 
     const crearUsuario = '/v1/accounts:signUp?key=';
@@ -176,6 +176,7 @@ export {
     login
 
 }
+
 
 /*
 Esta es la config para firebase realtime con passwd

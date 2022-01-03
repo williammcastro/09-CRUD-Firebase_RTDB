@@ -1,5 +1,5 @@
 
-    //getter para el localstorage
+    //getter para el localstorage -  BORRAR Y DEJAR DE EXPORTAR
     const getToken = () => {
         let token = '';
         if ( !!sessionStorage.getItem('tokenKey') ){
@@ -7,13 +7,14 @@
             token = sessionStorage.getItem('tokenKey');
             //console.log('recuperar token');
         }else{
-            console.log('no hay token guardados - cliente no logueado');
+            console.log('getToken : no hay token guardados - cliente no logueado');
+            return 'xurkabhaiutqlkuj';
         }
         return token;
     }
 
 
-    //Setter para el localstorage
+    //Setter para el localstorage - BORRAR Y DEJAR DE EXPORTAR
     const setToken = (tokenAuth) => {
         sessionStorage.setItem('tokenKey', tokenAuth);
     }
@@ -27,15 +28,16 @@
         if(!!sessionStorage.getItem('emailUsuarioLogueado')){
             emailUsuarioLogueado = sessionStorage.getItem('emailUsuarioLogueado');
             //console.log(emailUsuarioLogueado);
+            return emailUsuarioLogueado;
         }else{
-            console.log('no hay usuario logueado');
-            return 'no hay usuario logueado';
+            console.log('getUsuarioLogin : no hay usuario logueado');
+            return '';
         }
-        return emailUsuarioLogueado;
     }
 
     const setUsuarioLogin = (emailUsuario) => {
         sessionStorage.setItem('emailUsuarioLogueado', emailUsuario);
+        console.log('setUsuarioLogin : seteado usuario login : ', emailUsuario)
     }
 
 

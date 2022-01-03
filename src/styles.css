@@ -80,8 +80,19 @@ form {
     border-color: #2F3E48;
   }
 
+  
+  #cuadro_login {
+    /* Centrar el formulario en la página */
+    margin: 20px auto;
+    width: 460px;
+    /* Esquema del formulario */
+    padding: 1em;
+    border: 1px solid #CCC;
+    border-radius: 1em;
+    background-color: rgb(228, 225, 230);
+   }
 
-  #cuadro {
+  #cuadro_producto {
    /* Centrar el formulario en la página */
    margin: 20px auto;
    width: 460px;
@@ -91,5 +102,16 @@ form {
    border-radius: 1em;
    background-color: rgb(228, 225, 230);
   }
+
+  #cuadro_usuarios {
+    /* Centrar el formulario en la página */
+    margin: 20px auto;
+    width: 460px;
+    /* Esquema del formulario */
+    padding: 1em;
+    border: 1px solid #CCC;
+    border-radius: 1em;
+    background-color: rgb(228, 225, 230);
+   }
   
  
