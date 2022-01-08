@@ -3,6 +3,8 @@ import { getToken } from './localStorage'
 
 const urlCRUD = 'https://reqres.in/api/users';
 const urlFirebaseProductos = 'https://real-automotivation-default-rtdb.firebaseio.com/products.json';
+const urlFirebase = 'https://real-automotivation-default-rtdb.firebaseio.com/products/';
+
 
 const baseUrlUsuarios = 'https://identitytoolkit.googleapis.com';
 const firebaseToken = 'AIzaSyDFUD7ZaNazbMUPQdwYPxWqQK2IuQ5bmVI';
@@ -117,11 +119,12 @@ const obtenerProductos = async () => {
 
     const producto   = await resp.json();
     let productos = Object.entries( producto );
-    //console.log(productos);
+    // console.log(productos);
 
     for (let i = 0; i < productos.length; i++)  {
-        // console.log(productos[i][1].name );
+        // console.log(productos[i][0] );
         objProducto = {
+            'id'         : productos[i][0],
             'titulo'     : productos[i][1].name,
             'disponible' : productos[i][1].available,
             'fotoUrl'    : productos[i][1].picture,
@@ -134,12 +137,12 @@ const obtenerProductos = async () => {
 }
 
 
-// POST respuesta 400? depende del backend
+// POST respuesta 400? depende del backend funcion ok, en postman no se como se envia el producto!!!
 const crearProducto = async( producto ) => {
-    let varAuth = '?auth='
+    let varAuth = '.json?auth='
     let tokenAuthFB = getToken();
 
-    const resp = await fetch( `${ urlFirebaseProductos }${varAuth}${tokenAuthFB}`, {
+    const resp = await fetch( `${ urlFirebase }${varAuth}${tokenAuthFB}`, {
         method: 'POST',
         body: JSON.stringify( producto ),
         headers: {
@@ -150,17 +153,48 @@ const crearProducto = async( producto ) => {
     return await resp.json();
 }
 
+
+
 //Funcion para borrar productos
-const borrarProducto = ( id ) => {
-    console.log('borrando el id' + id)
-    //TODO:completar la funcion
-}
+const borrarProducto = async ( id ) => {
+
+    alert(`Seguro desea borrar el articulo : ${id}`  )
+    let varAuth = '.json?auth='
+    let tokenAuthFB = getToken();
+    const resp = await fetch(`${ urlFirebase }${id}${varAuth}${tokenAuthFB}`, {
+        method: 'DELETE'
+    });
+    return ( resp.ok ) ? console.log('Articulo Borrado') : console.log('No se pudo eliminar');}
+
+
+
+
 
 //Funcion para actualizar producto
-const actualizarProducto = ( id ) =>{
-    console.log('actualizando producto ' + id);
-    //TODO:completar la funcion
-}
+const editarProducto = async( id, producto ) =>{
+    console.log('editando el producto id : ' + id);
+    let varAuth = '.json?auth='
+    let tokenAuthFB = getToken();
+
+    const resp = await fetch(`${ urlFirebase }${id}${varAuth}${tokenAuthFB}`, {
+        method: 'PATCH',
+        body: JSON.stringify( producto ),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    } );
+
+    // return await resp.json();}
+    return ( resp.ok ) ? console.log('Articulo Editado') : console.log('No se pudo editar');}
+
+
+
+   
+
+
+
+
+
 
 
 export {
@@ -172,7 +206,7 @@ export {
     obtenerProductos,
     crearProducto,
     borrarProducto,
-    actualizarProducto,
+    editarProducto,
     login
 
 }

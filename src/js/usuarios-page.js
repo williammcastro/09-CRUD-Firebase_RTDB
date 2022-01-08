@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, signOut, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'
 
-import { crearProducto, getUsuario, obtenerProductos, obtenerUsuarios, crearUsuario, login } from "./crud-provider";
+import {  editarProducto, borrarProducto, crearProducto, getUsuario, obtenerProductos, obtenerUsuarios, crearUsuario, login } from "./crud-provider";
 import { getToken, getUsuarioLogin, setToken, setUsuarioLogin } from './localStorage'
 
 const firebaseConfig = {
@@ -28,60 +28,9 @@ let tbody2;
 //botones
 
 
-//-----SECCION CAJAS DE TEXTO------------------------
-
-//Campos para lectura de formulario -  crear usuario - cajas de texto y boton
-const nombre_crear_usuario = document.querySelector('#nombre_crear_usuario');
-const email_crear_usuario = document.querySelector('#email_crear_usuario');
-const pw_crear_usuario = document.querySelector('#pw_crear_usuario');
-const avatar_crear_usuario = document.querySelector('#avatar_crear_usuario');
-const btnCrearUsuario       = document.querySelector('#btnCrearUsuario');
-
-//---Campos para lectura de formulario - login - cajas de texto y boton 
-const email_login   = document.querySelector('#email_login');
-const pw_login      = document.querySelector('#pw_login');
-const btnLogin      = document.querySelector('#btnLogin');
-
-
-//Campos para lectura de formulario - ingresar producto - cajas de texto y boton
-const nombre        = document.querySelector("#nombre_insertar_producto");
-const disponible    = document.querySelector("#disponible_insertar_producto");
-const precio        = document.querySelector("#precio_insertar_producto");
-const fotoUrl       = document.querySelector("#imagen_insertar_producto");
-const btnIngresarProducto   = document.querySelector('#btnIngresarProducto');
-
-
-
-
-
-
-
-//Campos para lectura de formulario - actualizar producto - cajas de texto y boton
-
-
-//Campos para lectura de formulario - eliminar producto - cajas de texto y boton
-
-
-
-
-
-
-
-//Campos para lectura de formulario - actualizar usuario - cajas de texto y boton
-
-
-//Campos para lectura de formulario - borrar usuario - cajas de texto y boton
-
-
-//-----FIN SECCION CAJAS DE TEXTO------------------------
-
-//-----SECCION CUADROS LOGIN-PRODUCTO-USUARIOS----------
-const cuadro_login        = document.querySelector("#cuadro_login");
-const cuadro_producto        = document.querySelector("#cuadro_producto");
-const cuadro_usuarios        = document.querySelector("#cuadro_usuarios");
-const bloque_productos = document.querySelector(".bloque_productos");
-const bloque_usuarios = document.querySelector(".bloque_usuarios");
-//-----FIN SECCION CUADROS LOGIN-PRODUCTO-USUARIOS----------
+//-----SECCION CUADRO LOGIN----------
+const cuadro_login = document.querySelector("#cuadro_login");
+//-----FIN SECCION CUADRO LOGIN----------
 
 
 
@@ -89,6 +38,9 @@ const bloque_usuarios = document.querySelector(".bloque_usuarios");
 const btnLogoutNavbar = document.querySelector('#btnLogoutNavbar')
 const btnUsuariosNavbar = document.querySelector('#btnUsuariosNavbar')
 const btnProductosNavbar = document.querySelector('#btnProductosNavbar')
+const btnRegistrarse = document.querySelector('#btnRegistrarse')
+//----FIN SECCION - Botones de la barra de navegacion
+
 
 
 //Campo para mostrar el email del usuario logueado
@@ -96,59 +48,61 @@ const navbar_usuario_logueado = document.querySelector('#usuarioLogueado')
 //----FIN SECCION - Botones de la barra de navegacion
 
 //----SECCION HTML TABLAS
-const tablaProductos = document.querySelector('#tablaProductos');
+// const tablaProductos = document.querySelector('#tablaProductos');
 const tablaUsuarios = document.querySelector('#tablaUsuarios');
 
 
 //----SECCION BOTONES BORRAR Y EDITAR
 const btnEditar = document.querySelector('#btnEditar')
-const btnBorrar = document.querySelector('#btnBorrar');
 
 
 
 
 //------FUNCIONES-----------------------------
-let productoCapturado = {};
 
 
 
 const crearHtmlProductos = (  ) => {
     
     let html = `
-
-    <div id="tablaProductos">
-        <h1 class="mt-5">Catalogo de Productos</h1>
-    
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">Artículo</th>
-                    <th scope="col">Disponible</th>
-                    <th scope="col">Precio</th>
-                    <th scope="col">Editar</th>
-                    <th scope="col">Borrar</th>
-                    <th scope="col">Imagen</th>
-                </tr>
-            </thead>
-    
-            <tbody id="tbody1">
-            </tbody>
-        </table>
+    <div style="background-color: #bbb">
+        <br>
+        <div id="tablaProductos" style="background-color: #ccc">
+            <div id="divCrearProducto" class="d-flex justify-content-center">
+                <button id="btnCrearProducto" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">Crear Producto</button>
+            </div>
+            <h1 class="mt-5">Catalogo de Productos</h1>
+            <table class="table" style="background-color: #ddd">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Artículo</th>
+                        <th scope="col">Disponible</th>
+                        <th scope="col">Precio</th>
+                        <th scope="col">Editar</th>
+                        <th scope="col">Borrar</th>
+                        <th scope="col">Imagen</th>
+                    </tr>
+                </thead>
+        
+                <tbody id="tbody1">
+                </tbody>
+            </table>
+        </div>
     </div>
         `;
     
         const div = document.createElement('div');
+        
         div.innerHTML = html;
         body.appendChild( div );
-    
+
         tbody1 = document.querySelector('#tbody1');
-  
 }
 
 
 
 const crearHtmlUsuarios = (  ) => {
-
 
     let html = `
     <div id="tablaUsuarios">
@@ -164,7 +118,6 @@ const crearHtmlUsuarios = (  ) => {
                         <th scope="col">Avatar</th>
                     </tr>
                 </thead>
-
             <tbody id="tbody2">
             </tbody>
         </table>
@@ -195,21 +148,83 @@ const crearFilaUsuario = ( usuario ) => {
 //Funcion para hacer el render en html de la fila de cada producto
 const crearFilaProducto = ( producto ) => {
     const html = `
+        <td scope="col"> ${producto.id} </td>
         <td scope="col"> ${producto.titulo} </td>
         <td scope="col"> ${producto.disponible} </td>
         <td scope="col"> ${ producto.valor } </td>
-        <td scope="col"> <button class="btn btn-primary" id="btnEditar">Editar</button></td>
-        <td scope="col"> <button class="btn btn-danger" id="btnBorrar">Borrar</button></td>
+        <td scope="col"> <button class="btn btn-primary" id="${producto.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Editar</button></td>
+        <td scope="col"> <button class="btn btn-danger" id="${producto.id}">Borrar</button></td>
         <td scope="col"> <img class="img-thumbnail" src="${producto.fotoUrl}" width="80px"> </td>
 
 
     `;
-    console.log('crearFilaProducto : creados elementos btnEditar y btnBorrar ');
+    // console.log('crearFilaProducto : creados elementos btnEditar y btnBorrar ');
     const tr = document.createElement('tr');
     tr.innerHTML = html;
     tbody1.appendChild( tr );
 }
 
+
+
+const crearHtmlLogin = () => {
+    const html = `
+    <div id="cuadro_login">
+        <form method="post">
+            <h1 class="mt-5">Login</h1>
+                <ul>
+                    <li>
+                        <label for="email_login">Email:</label>
+                        <input type="text" id="email_login" name="email_login">
+                    </li>
+                    <li>
+                        <label for="pw_login">Password:</label>
+                        <input type="text" id="pw_login" name="pw_login">
+                    </li>
+                </ul>
+        </form>
+        <li class="button">
+            <button id="btnLogin" class="btn btn-primary">Login</button>
+        </li>
+    </div>
+    `;
+
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    body.appendChild( div );
+
+}
+
+const crearHtmlRegistro = () => {
+    const html = `
+    <div id="cuadro_registro">
+    <form class="crear_usuario" method="post">
+        <h1 class="mt-5">Registrarse</h1>
+            <ul>
+                <li>
+                    <label for="nombre_crear_usuario">Nombre:</label>
+                    <input type="text" id="nombre_crear_usuario" name="nombre_crear_usuario">
+                </li>
+                <li>
+                    <label for="email_crear_usuario">email:</label>
+                    <input type="text" id="email_crear_usuario" name="email_crear_usuario">
+                </li>
+                <li>
+                    <label for="pw_crear_usuario">Password:</label>
+                    <input type="text" id="pw_crear_usuario" name="pw_crear_usuario">
+                </li>
+            </ul>
+        </form>
+        <li class="button">
+            <button id="btnCrearUsuario" class="btn btn-primary">Crear Usuario</button>
+        </li>
+</div>
+    `;
+
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    body.appendChild( div );
+
+}
 
 
 //-------------------------------FUNCIONES-------------------------------------------
@@ -230,58 +245,76 @@ onAuthStateChanged( auth, ( user ) =>{
 
 
 //--------------------------------EVENTOS------------------------------------------
-    //---------------------BOTON CREAR USUARIO SIGN UP - Funcion  para crear un nuevo usuario
-    btnCrearUsuario.addEventListener( 'click', async () => {
+    //---------------------BOTON CREAR USUARIO SIGN UP - Funcion  para crear un nuevo usuario quite el boton del html!!!
+    // btnCrearUsuario.addEventListener( 'click', async () => {
+
+    //     const usuarioLogin = {
+    //         "email": email_crear_usuario.value,
+    //         "password": pw_crear_usuario.value,
+    //         "returnSecureToken": true,
+    //     }
+    //     await createUserWithEmailAndPassword(auth, usuarioLogin.email, usuarioLogin.password)
+    //         .then((cred) =>{
+    //             setUsuarioLogin( cred.user.email );
+    //             setToken(user.accessToken);
+
+    //             //console.log('usuario creado exitosamente : ', cred.user.email )
+    //         })
+    //         .catch((err) => {
+    //             console.log(err.message);
+    //         });
+
+    //         email_crear_usuario.value = '';
+    //         pw_crear_usuario.value = '';
+    //     } );
+
+
+    //     //----------BOTON LOGUEAR USUARIO EXISTENTE SIGN IN - Funcion  para loguear un usuario existente
+    const loguearUsuario = async (email, pass) => {
 
         const usuarioLogin = {
-            "email": email_crear_usuario.value,
-            "password": pw_crear_usuario.value,
-            "returnSecureToken": true,
-        }
-        await createUserWithEmailAndPassword(auth, usuarioLogin.email, usuarioLogin.password)
-            .then((cred) =>{
-                setUsuarioLogin( cred.user.email );
-                setToken(user.accessToken);
-
-                //console.log('usuario creado exitosamente : ', cred.user.email )
-            })
-            .catch((err) => {
-                console.log(err.message);
-            });
-
-            email_crear_usuario.value = '';
-            pw_crear_usuario.value = '';
-        } );
-
-
-        //----------BOTON LOGUEAR USUARIO EXISTENTE SIGN IN - Funcion  para loguear un usuario existente
-    btnLogin.addEventListener( 'click', async () => {
-
-        const usuarioLogin = {
-            "email": email_login.value,
-            "password": pw_login.value,
+            "email": email,
+            "password": pass,
             "returnSecureToken": true,
         }
         await signInWithEmailAndPassword(auth, usuarioLogin.email, usuarioLogin.password)
             .then((cred) =>{
                 setUsuarioLogin( cred.user.email );
-                console.log('signInWithEmailAndPassword.then : escribiendo en setUsuarioLogin : ' , usuarioLogin.email )
                 setToken( cred.user.accessToken);
-                console.log('USUARIO LOGUEADO CON  : ', cred.user.email )
+                console.log('btnLogin : USUARIO LOGUEADO CON  : ', cred.user.email )
                 btnLogoutNavbar.style.visibility = 'visible';
                 btnUsuariosNavbar.style.visibility = 'visible';
                 btnProductosNavbar.style.visibility = 'visible';
-                cuadro_login.parentElement.removeChild(cuadro_login);
+                // cuadro_login.parentElement.removeChild(cuadro_login);
                 init();
+                return true
             })
             .catch((err) => {
                 console.log(err.message);
+                return false
             });
+    }
+    
+    
 
-            email_login.value = '';
-            pw_login.value = '';
-        } );
+    //Boton en barra de navegacion para desplegar formulario de login o registro
+    btnRegistrarse.addEventListener( 'click', async () => {
+        const cuadro_login = document.querySelector('#cuadro_login');
+        if (cuadro_login != null){
+            //console.log(cuadro_login);
+            cuadro_login.parentElement.removeChild(cuadro_login);
+            btnRegistrarse.innerHTML = 'Login';
+            crearHtmlRegistro();
+            btnLogin = document.querySelectorAll('#btnLogin');
+        }else{
+            const cuadro_registro = document.querySelector('#cuadro_registro');
+            cuadro_registro.parentElement.removeChild(cuadro_registro);
+            btnRegistrarse.innerHTML = 'Registro';
+            crearHtmlLogin();
+            btnLogin = document.querySelectorAll('#btnLogin');
 
+        }
+    });
 
 
         //-----BOTON LOGOUT NAV BAR--------Esta funcion es para desloguear usuario
@@ -294,6 +327,7 @@ onAuthStateChanged( auth, ( user ) =>{
             btnLogoutNavbar.style.visibility = 'hidden';
             btnUsuariosNavbar.style.visibility = 'hidden';
             btnProductosNavbar.style.visibility = 'hidden';
+            tablaProductos.parentNode.removeChild(tablaProductos);
             init();
 
             // console.log('btnLogoutNavbar : usuario desauntenticado:');
@@ -303,7 +337,6 @@ onAuthStateChanged( auth, ( user ) =>{
             console.log(err.message);
         });
 
-        tablaProductos.parentNode.removeChild(tablaProductos);
         setToken('');
         setUsuarioLogin('');
         // btnLogoutNavbar.style.visibility = 'hidden';
@@ -320,7 +353,7 @@ onAuthStateChanged( auth, ( user ) =>{
         //-----BOTON PRODUCTOS NAV BAR --------Esta funcion es para desloguear usuario
     btnProductosNavbar.addEventListener('click', async (e) => {
         e.preventDefault();
-        init();
+        //init();
         console.log('btnProductosNavbar: hola mundo');
 
 
@@ -339,35 +372,272 @@ onAuthStateChanged( auth, ( user ) =>{
 
     });
 
-    //-------BOTONES TABLA BORRAR-----  
-    // btnBorrar.addEventListener( 'click', async (e) => {
-    //     e.preventDefault();
-    //     console.log('btnBorrar: hola mundo');
-    // } )
 
+//inicio cambio de if por switch-case en tablaProductos
+  
 //---------------------------------------------Funcion init()------------------------------
 
 export const init = async() => {
 
-    if ( !!getUsuarioLogin() ){//TODO: HAY Q COMPARARLO CON OTRA COSA SINO, LE COLOCO CUALQUIER COSA EN TOKEN Y ENTRO!!!
-        console.log('init:  getUsuarioLogin() es VERDADERO')
+//TODO: EL PRIMER IF HAY Q COMPARARLO CON OTRA COSA SINO, LE COLOCO CUALQUIER COSA EN TOKEN Y ENTRO!!!
+    if ( !!getUsuarioLogin() ){//SI EXISTE EL USUARIO LOGUEADO CONTINUA EN VERDADERO
+        console.log('init:  getUsuarioLogin() estamos logueados es : VERDADERO')
         crearHtmlProductos();
+        let tablaProductos = document.querySelector('#tablaProductos');
+        //const btnRegistrarse = document.querySelector('#btnRegistrarse')
+        // const btnCrearProducto = document.querySelector('#btnCrearProducto');
+
+
+        //IF solo para quitar el boton de registrarse en la barra de navegacion cuando el usuario se logueó
+        // if (!!btnRegistrarse){
+        //     console.log('entrando al if de bntRegistrarse ----quitar!!!');
+        //     btnRegistrarse.parentElement.removeChild(btnRegistrarse);
+        // }
 
         //(await obtenerUsuarios()).forEach( crearFilaUsuario );
-        (await obtenerProductos()).forEach( crearFilaProducto );
+        (await obtenerProductos()).forEach( crearFilaProducto )//No se puede mover mas arriba!!!! ojooo!!!
 
-    }else{
-        console.log('init:  getUsuarioLogin() es FALSO ')
+        //--------Tomar eventos de la tablaProdcutos - es la tabla principal de productos-----
+        tablaProductos.addEventListener( 'click', async (e) => {
+            e.preventDefault();
+            // console.log(e.target);
+
+
+
+            switch (e.target.getAttribute('class')) {
+
+                //CASE 0 : PRESIONADO BOTON BORRAR DE tablaProductos PARA BORRAR PRODUCTO----------------
+                case 'btn btn-danger':
+                    const res =  borrarProducto( e.target.getAttribute('id') )
+                    console.log('esta es la respuesta del borrado : ', res);
+                    let tablaProductos = document.querySelector('#tablaProductos');//OJO-debe volverse a crear la ref x q sino crea dos tablas seguidas y otros comportamientos extraños                                
+                    tablaProductos.remove();
+                    crearHtmlProductos();
+                    (await obtenerProductos()).forEach( crearFilaProducto )
+                    break;
+
+                //CASE 1 : PRESIONADO BOTON EDITAR MODAL DE tablaProductos  PARA EDITAR PRODUCTO------------
+                case 'btn btn-primary':
+                    console.log('BOTON GRIS EDITAR MODAL DE tablaProductos');
+                    //console.log(e.target.getAttribute('id'));
+                    let idProducto = e.target.getAttribute('id');
+                    const divModal = document.querySelector('.modal-dialog');
+                    const formModal= document.querySelector('#formModal')
+                    console.log(idProducto);
+
+                    divModal.addEventListener( 'click', async (e) => {
+                        e.preventDefault();
+                        //console.log(e.target);
+                        if (e.target.getAttribute('id') == 'btnCrearModal'){
+                            console.log('BOTON ACEPTAR DEL MODAL DE EDITAR');
+                            let nombreModal = document.querySelector('#nombreModal');
+                            let disponibleModal = document.querySelector('#disponibleModal');
+                            let precioModal = document.querySelector('#precioModal');
+                            let fotoModal = document.querySelector('#fotoModal');
+
+                            const producto = {
+                                "available": disponibleModal.value,
+                                "name": nombreModal.value,
+                                "picture": fotoModal.value,
+                                "price": precioModal.value,
+                            }
+
+                            const res =  await editarProducto( idProducto, producto  )
+                            formModal.reset();
+                            let tablaProductos = document.querySelector('#tablaProductos');//OJO-debe volverse a crear la ref x q sino crea dos tablas seguidas y otros comportamientos extraños                                
+                            tablaProductos.remove();
+                            crearHtmlProductos();
+                            (await obtenerProductos()).forEach( crearFilaProducto )
+                        }
+                    } );                
+                    break;
+
+                //CASE 2 : EVENTO BOTON MODAL PARA CREAR PRODUCTO---------------------------
+                case 'btn btn-info':
+                        console.log('BOTON AZUL CREAR PRODUCTO MODAL DE tablaProductos');
+                        console.log(e.target.getAttribute('class'));
+                        const divModal2 = document.querySelector('.modal-dialog');
+                        const formModal2= document.querySelector('#formModal')
+                        //console.log(divModal);
+        
+                        divModal2.addEventListener( 'click', async (e) => {
+                            e.preventDefault();
+                            //console.log(e.target);
+                            if (e.target.getAttribute('id') == 'btnCrearModal'){
+                                console.log('BOTON ACEPTAR DEL MODAL DE CREAR PRODUCTO');
+                                let nombreModal = document.querySelector('#nombreModal');
+                                let disponibleModal = document.querySelector('#disponibleModal');
+                                let precioModal = document.querySelector('#precioModal');
+                                let fotoModal = document.querySelector('#fotoModal');
+        
+                                const producto = {
+                                    "available": disponibleModal.value,
+                                    "name": nombreModal.value,
+                                    "picture": fotoModal.value,
+                                    "price": precioModal.value,
+                                }
+        
+                                const res =  await crearProducto(  producto  )
+                                let tablaProductos = document.querySelector('#tablaProductos');//OJO-debe volverse a crear la ref x q sino crea dos tablas seguidas y otros comportamientos extraños                                
+                                tablaProductos.remove();
+                                formModal2.reset();
+
+
+                                // console.log(tablaProductos);
+                                // console.log(tablaProductos.parentElement)
+                                // console.log( tablaProductos.parentNode )
+
+                                //tablaProductos.parentElement.removeChild(tablaProductos);
+                                crearHtmlProductos();
+                                (await obtenerProductos()).forEach( crearFilaProducto )
+                                
+
+                                //const tablaProductos = document.querySelector('#tablaProductos');
+
+                            }
+                        } );                
+                    break;
+            
+                //CASE 3 : DEFAULT---------------------------
+                default:
+                    break;
+            }
+
+
+
+            //cambio por el caase??
+            // //BOTON BORRAR DE tablaProductos PARA BORRAR PRODUCTO--------------------------------------------------------
+            // if (e.target.getAttribute('class') == 'btn btn-danger'){
+            //     const res =  borrarProducto( e.target.getAttribute('id') )
+            //     console.log('esta es la respuesta del borrado : ', res);
+            //     tablaProductos.remove();
+            //     crearHtmlProductos();
+            //     (await obtenerProductos()).forEach( crearFilaProducto )
+            // }
+
+
+            // //BOTON EDITAR MODAL DE tablaProductos  PARA EDITAR PRODUCTO--------------------------------------------------------
+            // if (e.target.getAttribute('class') == 'btn btn-primary'){
+            //     console.log('BOTON GRIS EDITAR MODAL DE tablaProductos');
+            //     //console.log(e.target.getAttribute('id'));
+            //     let idProducto = e.target.getAttribute('id');
+            //     const divModal = document.querySelector('.modal-dialog');
+            //     const formModal= document.querySelector('#formModal')
+            //     //console.log(divModal);
+
+            //     divModal.addEventListener( 'click', async (e) => {
+            //         e.preventDefault();
+            //         //console.log(e.target);
+            //         if (e.target.getAttribute('id') == 'btnCrearModal'){
+            //             console.log('BOTON ACEPTAR DEL MODAL DE EDITAR');
+            //             let nombreModal = document.querySelector('#nombreModal');
+            //             let disponibleModal = document.querySelector('#disponibleModal');
+            //             let precioModal = document.querySelector('#precioModal');
+            //             let fotoModal = document.querySelector('#fotoModal');
+
+            //             const producto = {
+            //                 "available": disponibleModal.value,
+            //                 "name": nombreModal.value,
+            //                 "picture": fotoModal.value,
+            //                 "price": precioModal.value,
+            //             }
+
+            //             const res =  await editarProducto( idProducto, producto  )
+            //             formModal.reset();
+            //             //tablaProductos.reset();
+            //             tablaProductos.remove();
+            //             crearHtmlProductos();
+            //             (await obtenerProductos()).forEach( crearFilaProducto )
+                        
+            //         }
+            //     } );
+            // }
+            //fin de cambio por el caase??
+
+
+            // //EVENTO BOTON MODAL PARA CREAR PRODUCTO---------------------------
+            // if (e.target.getAttribute('class') == 'btn btn-info'){
+            //     console.log('BOTON AZUL CREAR PRODUCTO MODAL DE tablaProductos');
+            //     console.log(e.target.getAttribute('class'));
+            //     const divModal = document.querySelector('.modal-dialog');
+            //     const formModal= document.querySelector('#formModal')
+            //     //console.log(divModal);
+
+            //     divModal.addEventListener( 'click', async (e) => {
+            //         e.preventDefault();
+            //         //console.log(e.target);
+            //         if (e.target.getAttribute('id') == 'btnCrearModal'){
+            //             console.log('BOTON ACEPTAR DEL MODAL DE CREAR PRODUCTO');
+            //             let nombreModal = document.querySelector('#nombreModal');
+            //             let disponibleModal = document.querySelector('#disponibleModal');
+            //             let precioModal = document.querySelector('#precioModal');
+            //             let fotoModal = document.querySelector('#fotoModal');
+
+            //             const producto = {
+            //                 "available": disponibleModal.value,
+            //                 "name": nombreModal.value,
+            //                 "picture": fotoModal.value,
+            //                 "price": precioModal.value,
+            //             }
+
+            //             const res =  await crearProducto(  producto  )
+            //             formModal.reset();
+            //             //tablaProductos.reset();
+            //             tablaProductos.remove();
+            //             crearHtmlProductos();
+            //             (await obtenerProductos()).forEach( crearFilaProducto )
+            //         }
+            //     } );
+            // }
+
+
+
+
+        });//Fin de listener tablaProductos
+
+
+
+        //Para retirar el cuadro login cuando el usuario esta logueado
+        if(!!cuadro_login){
+            cuadro_login.parentElement.removeChild(cuadro_login);
+        }
+
+
+    }else{//----------USUARIO NO ESTA LOGUEADO-----------------
+        console.log('init:  getUsuarioLogin() estamos logueados es : FALSO ')
+        crearHtmlLogin();
+
+        const cuadro_login = document.querySelector('#cuadro_login');
+
+        cuadro_login.addEventListener( 'click', async (e) => {
+            e.preventDefault();
+            console.log(e.target.getAttribute('id'));
+            const email = document.querySelector('#email_login');
+            const pass = document.querySelector('#pw_login');
+            if (e.target.getAttribute('id') == 'btnLogin'){
+                const res = await loguearUsuario( email.value, pass.value );
+                cuadro_login.parentElement.removeChild(cuadro_login);
+                const btnRegistrarse = document.querySelector('#btnRegistrarse')
+                if (!!btnRegistrarse){
+                    btnRegistrarse.parentElement.removeChild(btnRegistrarse);
+                }                // btnRegistrarse.style.visibility = 'hiden';//revisar cual de las dos funca para q no estalle btnRegistrarse.addEventListener
+            }
+        });
+
+
+
+    
         btnLogoutNavbar.style.visibility = 'hidden';
         btnUsuariosNavbar.style.visibility = 'hidden';
         btnProductosNavbar.style.visibility = 'hidden';
-        bloque_productos.parentNode.removeChild(bloque_productos);
-        bloque_usuarios.parentNode.removeChild(bloque_usuarios);
+        // bloque_productos.parentNode.removeChild(bloque_productos);
+        // bloque_usuarios.parentNode.removeChild(bloque_usuarios);
 
     }
-
-    
 }
+
+
+
 
 
 

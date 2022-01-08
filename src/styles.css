@@ -92,7 +92,7 @@ form {
     background-color: rgb(228, 225, 230);
    }
 
-  #cuadro_producto {
+  #cuadro_registro {
    /* Centrar el formulario en la página */
    margin: 20px auto;
    width: 460px;
@@ -114,4 +114,9 @@ form {
     background-color: rgb(228, 225, 230);
    }
   
+
+   .nav-link {
+    color:#555;
+    /* border-color: #2F3E48; */
+   }
  

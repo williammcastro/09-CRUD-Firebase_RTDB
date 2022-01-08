@@ -33,199 +33,60 @@
 
           <a class="nav-link" id="btnProductosNavbar" href="#">Productos</a>
 
-          <!-- <a class="nav-link disabled">Disabled</a> -->
         </div>
       </div>
+      <a class="nav-link" class="d-flex justify-content-end" id="btnRegistrarse" href="#">Registrarse</a>
       <div id="usuarioLogueado">...</div>
     </div>
   </nav>
-<!-- ---Barra de Navegacion End--- -->
+  <br>
 
-    <!-- <h1>Webpack starter 3</h1> -->
-<!-- -------------------------------INICIO BLOQUE LOGIN--------------------------------- -->
-
-    <div id="cuadro_login">
-        <form method="post">
-            <h1 class="mt-5">Login</h1>
-                <ul>
-                    <li>
-                        <label for="email_login">Email:</label>
-                        <input type="text" id="email_login" name="email_login">
-                    </li>
-                    <li>
-                        <label for="pw_login">Password:</label>
-                        <input type="text" id="pw_login" name="pw_login">
-                    </li>
-                </ul>
-            </form>
-            <li class="button">
-                <button id="btnLogin" class="btn btn-primary">Login</button>
-            </li>
-    </div>
+<!-- ---Fin Barra de Navegacion--- -->
 
 
-<!-- -------------------------------INICIO BLOQUE PRODUCTOS--------------------------------- -->
-
-<div class="bloque_productos">
-    <div id="cuadro_producto">
-        <form  method="post">
-            <h1 class="mt-5">Ingresar Producto - OK</h1>
-                <ul>
-                    <li>
-                        <label for="nombre_insertar_producto">Nombre:</label>
-                        <input type="text" id="nombre_insertar_producto" name="nombre_insertar_producto">
-                    </li>
-                    <li>
-                        <label for="disponible_insertar_producto">Disponible:</label>
-                        <input type="text" id="disponible_insertar_producto" name="disponible_insertar_producto">
-                    </li>
-                    <li>
-                        <label for="precio_insertar_producto">Precio:</label>
-                        <input type="text" id="precio_insertar_producto" name="precio_insertar_producto">
-                    </li>
-                    <li>
-                        <label for="imagen_insertar_producto">Imagen:</label>
-                        <input type="text" id="imagen_insertar_producto" name="imagen_insertar_producto">
-                    </li>
-
-                </ul>
-            </form>
-            <li class="button">
-                <button id="btnIngresarProducto" class="btn btn-primary">Ingresar Producto</button>
-            </li>
-    </div>
 
 
-    <div id="cuadro_producto">
-        <form method="post">
-            <h1 class="mt-5">Actualizar Producto</h1>
-                <ul>
-                    <li>
-                        <label for="ID_actualizar_producto">ID:</label>
-                        <input type="text" id="ID_actualizar_producto" name="ID_actualizar_producto">
-                    </li>
-                    <li>
-                        <label for="nombre_actualizar">Nombre:</label>
-                        <input type="text" id="nombre_actualizar_producto" name="nombre_actualizar_producto">
-                    </li>
-                    <li>
-                        <label for="disponible_actualizar_producto">disponible:</label>
-                        <input type="text" id="disponible_actualizar_producto" name="disponible_actualizar_producto">
-                    </li>
-                    <li>
-                        <label for="precio_actualizar_producto">precio:</label>
-                        <input type="text" id="precio_actualizar_producto" name="precio_actualizar_producto">
-                    </li>
-                    <li>
-                        <label for="imagen_actualizar_producto">imagen:</label>
-                        <input type="text" id="imagen_actualizar_producto" name="imagen_actualizar_producto">
-                    </li>
-                </ul>
-        </form>
-        <li class="button">
-            <button id="btnActualizarProducto" class="btn btn-primary">Actualizar Producto</button>
-        </li>
-    </div>
-
-    <div id="cuadro_producto">
-        <form method="post">
-            <h1 class="mt-5">Eliminar producto</h1>
-                <ul>
-                    <li>
-                        <label for="ID_eliminar_producto">ID:</label>
-                        <input type="text" id="ID_eliminar_producto" name="ID_eliminar_producto">
-                    </li>
-
-                </ul>
-        </form>
-        <li class="button">
-            <button id="btnEliminarProducto" class="btn btn-primary">Eliminar Producto</button>
-        </li>
-    </div>
+<!-- ---Modal oculto--- -->
+<div id="divModal" >
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+      <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Crear Producto</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <form id="formModal">
+          <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Nombre</label>
+              <input type="text" class="form-control" id="nombreModal">
+          </div>
+          <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Disponible</label>
+              <input type="text" class="form-control" id="disponibleModal">
+          </div>
+          <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Precio</label>
+              <input type="text" class="form-control" id="precioModal">
+          </div>
+          <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Foto</label>
+              <input type="text" class="form-control" id="fotoModal">
+          </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnCrearModal" >Crear Producto</button>
+      </div>
+      </div>
+  </div>
+  </div>
 </div>
+<!-- ---Fin Modal oculto--- -->
 
 
-<!-- -------------------------------INICIO BLOQUE USUARIOS--------------------------------- -->
 
-<div class="bloque_usuarios">
-    <div id="cuadro_usuarios">
-        <form class="crear_usuario" method="post">
-            <h1 class="mt-5">Crear Usuario - OK</h1>
-                <ul>
-                    <li>
-                        <label for="nombre_crear_usuario">Nombre:</label>
-                        <input type="text" id="nombre_crear_usuario" name="nombre_crear_usuario">
-                    </li>
-                    <li>
-                        <label for="email_crear_usuario">email:</label>
-                        <input type="text" id="email_crear_usuario" name="email_crear_usuario">
-                    </li>
-                    <li>
-                        <label for="pw_crear_usuario">Password:</label>
-                        <input type="text" id="pw_crear_usuario" name="pw_crear_usuario">
-                    </li>
-                    <li>
-                        <label for="avatar_crear_usuario">Avatar:</label>
-                        <input type="text" id="avatar_crear_usuario" name="avatar_crear_usuario">
-                    </li>
-                </ul>
-            </form>
-            <li class="button">
-                <!-- ****************************BOTON CREAR USUARIO****************************** -->
-                <button id="btnCrearUsuario" class="btn btn-primary">Crear Usuario</button>
-            </li>
-    </div>
-
-
-    <div id="cuadro_usuarios">
-        <form method="post">
-            <h1 class="mt-5">Actualizar Usuario</h1>
-                <ul>
-                    <li>
-                        <label for="id_actualizar_usuario">ID:</label>
-                        <input type="text" id="id_actualizar_usuario" name="id_actualizar_usuario">
-                    </li>
-                    <li>
-                        <label for="nombre_actualizar_usuario">Nombre:</label>
-                        <input type="text" id="nombre_actualizar_usuario" name="nombre_actualizar_usuario">
-                    </li>
-                    <li>
-                        <label for="email_actualizar_usuario">email:</label>
-                        <input type="email" id="email_actualizar_usuario" name="email_actualizar_usuario">
-                    </li>
-                    <li>
-                        <label for="avatar_actualizar_usuario">Avatar:</label>
-                        <input type="text" id="avatar_actualizar_usuario" name="avatar_actualizar_usuario">
-                    </li>
-                </ul>
-        </form>
-        <li class="button">
-            <button id="btnActualizarUsuario" class="btn btn-primary">Actualizar Usuario</button>
-        </li>
-    </div>
-
-    <div id="cuadro_usuarios">
-        <form method="post">
-            <h1 class="mt-5">Eliminar Usuario</h1>
-                <ul>
-                    <li>
-                        <label for="id_eliminar_usuario">ID:</label>
-                        <input type="text" id="id_eliminar_usuario" name="id_eliminar_usuario">
-                    </li>
-
-                </ul>
-        </form>
-        <li class="button">
-            <button id="btnEliminarUsuario" class="btn btn-primary">Eliminar Usuario</button>
-        </li>
-    </div>
-</div>
-
-
-<!-- -------------------------------FIN BLOQUE USUARIOS--------------------------------- -->
-
-
-    <!-- <script src="./index.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 </html>
