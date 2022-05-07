@@ -7,7 +7,7 @@ const urlFirebase = 'https://real-automotivation-default-rtdb.firebaseio.com/pro
 
 
 const baseUrlUsuarios = 'https://identitytoolkit.googleapis.com';
-const firebaseToken = '2zaSyDIuQ5bmVIAFUD7ZaNazbMUPQdwYPxWqQK2';
+const firebaseToken = '2zaSyDIuQ5bmVIAFUD7ZaNazbMUPQdwYPxWqQK2';// colocar el de la cuenta correspondiente
 
 
 // //GET se obtiene el usuario
